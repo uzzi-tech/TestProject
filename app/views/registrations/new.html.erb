@@ -1,0 +1,36 @@
+<h2>Sign Up</h2>
+
+<%= form_with model: @user, url: signup_path, method: :post do |f| %>
+  
+  
+  <div class="field">
+    <%= f.label :name %><br>
+    <%= f.text_field :name, required: true %>
+  </div>
+
+  <div class="field">
+    <%= f.label :email %><br>
+    <%= f.email_field :email, required: true %>
+  </div>
+
+  <div class="field">
+    <%= f.label :password %><br>
+    <%= f.password_field :password, required: true %>
+  </div>
+
+  <div class="field">
+    <%= f.label :password_confirmation %><br>
+    <%= f.password_field :password_confirmation, required: true %>
+  </div>
+
+  <div class="field">
+    <%= f.label :user_type, "Select Role" %><br>
+    <%= f.select :user_type, User.user_types.keys.map { |role| [role.humanize, role] } %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Sign Up" %>
+  </div>
+<% end %>
+
+<p>Already have an account? <%= link_to "Login", login_path %></p>
