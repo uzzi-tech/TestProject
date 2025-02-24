@@ -1,0 +1,6 @@
+<h1><%= @project.name %></h1>
+<p><%= @project.description %></p>
+
+<%= link_to "Bugs", project_bugs_path(@project) %>
+
+<%= link_to "Back to Projects", projects_path %>

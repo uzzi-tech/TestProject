@@ -1,0 +1,14 @@
+<h1><%= @bug.title %></h1>
+<p><strong>Description:</strong> <%= @bug.description %></p>
+<p><strong>Status:</strong> <%= @bug.status %></p>
+<p><strong>Bug Type:</strong> <%= @bug.bug_type %></p>
+<p><strong>Assigned Developer:</strong> <%= @bug.developer&.name || "Unassigned" %></p>
+<p><strong>Deadline:</strong> <%= @bug.deadline %></p>
+
+<% if @bug.screenshot.present? %>
+  <p><strong>Screenshot:</strong></p>
+  <%= image_tag @bug.screenshot.url %>
+<% end %>
+
+<%= link_to "Edit Bug", edit_project_bug_path(@project, @bug) %> |
+<%= link_to "Back to Bugs", project_bugs_path(@project) %>

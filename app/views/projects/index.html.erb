@@ -1,0 +1,12 @@
+<h1>Projects</h1>
+<%= link_to "New Project", new_project_path %>
+
+<ul>
+  <% @projects.each do |project| %>
+    <li>
+      <%= link_to project.name, project_path(project) %>
+      <%= link_to "Edit", edit_project_path(project) %> |
+      <%= link_to "Delete", project_path(project), method: :delete, data: { confirm: "Are you sure?" } %>
+    </li>
+  <% end %>
+</ul>

@@ -1,0 +1,62 @@
+<h1>New Bug for <%= @project.name %></h1>
+
+<%= form_with model: [@project, @bug], local: true do |f| %>
+  <div>
+    <%= f.label :title %>
+    <%= f.text_field :title %>
+  </div>
+
+  <div>
+    <%= f.label :description %>
+    <%= f.text_area :description %>
+  </div>
+
+  <div>
+    <%= f.label :bug_type %>
+    <%= f.select :bug_type, Bug.bug_types.keys.map { |k| [k.humanize, k] }, {}, { id: "bug_type_select" } %>
+  </div>
+
+  <div>
+    <%= f.label :status %>
+    <%= f.select :status, [], {}, { id: "status_select" } %>
+  </div>
+
+  <div>
+    <%= f.label :developer_id, "Assign to Developer" %>
+    <%= f.collection_select :developer_id, User.all, :id, :name, include_blank: "Unassigned" %>
+  </div>
+
+  <div>
+    <%= f.submit "Create Bug" %>
+  </div>
+<% end %>
+
+<%= link_to "Back", project_bugs_path(@project) %>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const bugTypeSelect = document.getElementById("bug_type_select");
+    const statusSelect = document.getElementById("status_select");
+
+    const featureStatuses = <%= Bug::FEATURE_STATUSES.map { |k, v| [k.to_s.humanize, k] }.to_json.html_safe %>;
+    const bugStatuses = <%= Bug::BUG_STATUSES.map { |k, v| [k.to_s.humanize, k] }.to_json.html_safe %>;
+
+    function updateStatusOptions() {
+      statusSelect.innerHTML = ""; // Clear options
+      const selectedType = bugTypeSelect.value;
+      const statuses = selectedType === "feature_request" ? featureStatuses : bugStatuses;
+
+      statuses.forEach(([label, value]) => {
+        const option = document.createElement("option");
+        option.value = value;
+        option.textContent = label;
+        statusSelect.appendChild(option);
+      });
+    }
+
+    bugTypeSelect.addEventListener("change", updateStatusOptions);
+    updateStatusOptions(); // Set initial state
+  });
+</script>
+

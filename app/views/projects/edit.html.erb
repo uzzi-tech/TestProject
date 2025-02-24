@@ -1,0 +1,14 @@
+<h1>Edit Project</h1>
+<%= form_with model: @project, url: project_path(@project), method: :patch do |form| %>
+  <p>
+    <%= form.label :name %><br>
+    <%= form.text_field :name %>
+  </p>
+  <p>
+    <%= form.label :description %><br>
+    <%= form.text_area :description %>
+  </p>
+  <p>
+    <%= form.submit "Update Project" %>
+  </p>
+<% end %>
