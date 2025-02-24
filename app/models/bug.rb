@@ -1,5 +1,6 @@
 class Bug < ApplicationRecord
   enum bug_type: { feature_request: 0, bug: 1 }
+  before_validation :set_default_status, on: :create
 
   # Define separate status mappings
   FEATURE_STATUSES = { new_feature: 0, started: 1, completed: 2 }
@@ -7,7 +8,6 @@ class Bug < ApplicationRecord
 
   validates :title, presence: true, uniqueness: { scope: :project_id }
   validates :bug_type, presence: true
-  validates :status, presence: true
   validates :creator_id, presence: true  
 
   belongs_to :project
@@ -17,6 +17,12 @@ class Bug < ApplicationRecord
   validate :validate_status_based_on_type
 
   private
+
+  def set_default_status
+    if status.nil?
+      self.status = bug? ? BUG_STATUSES[:new_bug] : FEATURE_STATUSES[:new_feature]
+    end
+  end
 
   def validate_status_based_on_type
     if feature_request? && !FEATURE_STATUSES.values.include?(status)

@@ -39,8 +39,8 @@
     const bugTypeSelect = document.getElementById("bug_type_select");
     const statusSelect = document.getElementById("status_select");
 
-    const featureStatuses = <%= Bug::FEATURE_STATUSES.map { |k, v| [k.to_s.humanize, k] }.to_json.html_safe %>;
-    const bugStatuses = <%= Bug::BUG_STATUSES.map { |k, v| [k.to_s.humanize, k] }.to_json.html_safe %>;
+    const featureStatuses = <%= Bug::FEATURE_STATUSES.map { |k, v| [k.to_s.humanize, v] }.to_json.html_safe %>;
+    const bugStatuses = <%= Bug::BUG_STATUSES.map { |k, v| [k.to_s.humanize, v] }.to_json.html_safe %>;
 
     function updateStatusOptions() {
       statusSelect.innerHTML = ""; // Clear options
@@ -49,7 +49,7 @@
 
       statuses.forEach(([label, value]) => {
         const option = document.createElement("option");
-        option.value = value;
+        option.value = value;  // Ensure value is an integer
         option.textContent = label;
         statusSelect.appendChild(option);
       });

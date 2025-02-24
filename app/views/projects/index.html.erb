@@ -4,9 +4,9 @@
 <ul>
   <% @projects.each do |project| %>
     <li>
-      <%= link_to project.name, project_path(project) %>
-      <%= link_to "Edit", edit_project_path(project) %> |
-      <%= link_to "Delete", project_path(project), method: :delete, data: { confirm: "Are you sure?" } %>
+      <%= link_to project.name, project_path(project) %>  |
+      <%= link_to "Edit", edit_project_path(project) %>  |
+      <%= button_to "Delete", delete_project_path(project), method: :delete, data: { confirm: "Are you sure?" } %>
     </li>
   <% end %>
 </ul>
