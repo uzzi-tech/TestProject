@@ -1,6 +1,7 @@
 class Bug < ApplicationRecord
   enum bug_type: { feature_request: 0, bug: 1 }
   before_validation :set_default_status, on: :create
+  mount_uploader :screenshot, ScreenshotUploader
 
   # Define separate status mappings
   FEATURE_STATUSES = { new_feature: 0, started: 1, completed: 2 }
@@ -15,6 +16,7 @@ class Bug < ApplicationRecord
   belongs_to :developer, class_name: "User", optional: true  
 
   validate :validate_status_based_on_type
+  validates :screenshot, format: { with: /\.(png|gif)\z/i, message: "must be a PNG or GIF" }, allow_nil: true
 
   private
 

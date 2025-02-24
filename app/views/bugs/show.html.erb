@@ -7,7 +7,9 @@
 
 <% if @bug.screenshot.present? %>
   <p><strong>Screenshot:</strong></p>
-  <%= image_tag @bug.screenshot.url %>
+  <%= image_tag @bug.screenshot.url, alt: "Bug Screenshot", width: "300" %>
+<% else %>
+  <p>No screenshot uploaded.</p>
 <% end %>
 
 <%= link_to "Edit Bug", edit_project_bug_path(@project, @bug) %> |

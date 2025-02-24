@@ -2,6 +2,8 @@ class BugsController < ApplicationController
     before_action :set_project
     before_action :set_bug, only: [:show, :edit, :update, :destroy]
     before_action :authorize_bug_update, only: [:edit, :update]
+    before_action :authorize_manager_or_qa, only: [:new, :create, :edit, :update, :destroy]
+
   
     def index
       if current_user.manager?
@@ -53,6 +55,10 @@ class BugsController < ApplicationController
     end
   
     private
+    def authorize_manager_or_qa
+      redirect_to project_bugs_path(@project), alert: "Access denied!" unless current_user.manager? || current_user.qa?
+    end    
+      
 
     def authorize_bug_update
       if current_user.developer? && @bug.developer_id != current_user.id
@@ -71,7 +77,7 @@ class BugsController < ApplicationController
     end
   
     def bug_params
-      params.require(:bug).permit(:title, :description, :bug_type, :status, :developer_id).tap do |whitelisted|
+      params.require(:bug).permit(:title, :description, :bug_type, :status, :developer_id, :screenshot).tap do |whitelisted|
         whitelisted[:status] = whitelisted[:status].to_i if whitelisted[:status].present?
       end
     end

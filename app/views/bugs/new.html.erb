@@ -1,4 +1,7 @@
 <h1>New Bug for <%= @project.name %></h1>
+<% unless current_user.manager? || current_user.qa? %>
+  <p>You do not have permission to create a bug.</p>
+<% end %>
 
 <%= form_with model: [@project, @bug], local: true do |f| %>
   <div>
@@ -19,6 +22,11 @@
   <div>
     <%= f.label :status %>
     <%= f.select :status, [], {}, { id: "status_select" } %>
+  </div>
+
+  <div>
+    <%= f.label :screenshot %>
+    <%= f.file_field :screenshot %>
   </div>
 
   <div>
