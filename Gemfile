@@ -44,6 +44,7 @@ gem "bootsnap", require: false
 # ------gem file
 gem 'bcrypt', '~> 3.1.7'
 gem 'carrierwave'
+gem 'cancancan'
 
 
 

@@ -7,13 +7,12 @@ class RegistrationsController < ApplicationController
       @user = User.new(user_params)
   
       if @user.save
-        session[:user_id] = @user.id  # Auto-login after signup
-        flash[:notice] = "Account created successfully!"
+        flash[:notice] = "Account created successfully!"  #flash is used to store temporary messages that persist across redirects.
         redirect_to root_path
       else
         Rails.logger.info "❌ SIGNUP FAILED: #{@user.errors.full_messages.join(", ")}"
         flash.now[:alert] = "Signup failed. Please check the errors below."
-        render :new, status: :unprocessable_entity
+        render :new, status: :unprocessable_entity  #he request was understood, but data validation failed.
       end
     end
   

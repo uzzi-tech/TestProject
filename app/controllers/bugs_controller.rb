@@ -9,7 +9,7 @@ class BugsController < ApplicationController
       if current_user.manager?
         @bugs = Bug.all
       elsif current_user.qa?
-        @bugs = Bug.where(project_id: current_user.project_ids) # QA sees assigned projects' bugs
+        @bugs = Bug.where(project_id: current_user.project_ids) 
       elsif current_user.developer?
         @bugs = Bug.where(developer_id: current_user.id) # Developer sees only assigned bugs
       end
@@ -77,10 +77,10 @@ class BugsController < ApplicationController
     end
   
     def bug_params
-      params.require(:bug).permit(:title, :description, :bug_type, :status, :developer_id, :screenshot).tap do |whitelisted|
+      params.require(:bug).permit(:title, :description, :bug_type, :status, :developer_id, :screenshot, :deadline).tap do |whitelisted|
         whitelisted[:status] = whitelisted[:status].to_i if whitelisted[:status].present?
       end
-    end
+    end    
     
   end
   

@@ -25,7 +25,7 @@
 
   <div class="field">
     <%= f.label :user_type, "Select Role" %><br>
-    <%= f.select :user_type, User.user_types.keys.map { |role| [role.humanize, role] } %>
+    <%= f.select :user_type, User.user_types.keys %>
   </div>
 
   <div class="actions">

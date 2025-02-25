@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   get "/signup", to: "registrations#new"   # Signup Page
   post "/signup", to: "registrations#create" # Handle Signup Submission
   
+  #get "sessionshow", to: "sessions#show"  # Show current user information
   get "/login", to: "sessions#new"    # Login Page
   post "/login", to: "sessions#create"  # Handle Login Submission
   delete "/logout", to: "sessions#destroy"  # Logout

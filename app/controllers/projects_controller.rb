@@ -1,4 +1,5 @@
 class ProjectsController < ApplicationController
+  load_and_authorize_resource
   before_action :set_project, only: [:show, :edit, :update, :destroy]
   before_action :authorize_manager, only: [:new, :create, :edit, :update, :destroy]
 

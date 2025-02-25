@@ -3,6 +3,11 @@ class SessionsController < ApplicationController
     # Show login form
   end
 
+  # def show
+  #   render json: session
+  # end
+  
+
   def create
     user = User.find_by(email: params[:email])
     

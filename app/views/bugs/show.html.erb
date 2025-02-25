@@ -1,6 +1,14 @@
 <h1><%= @bug.title %></h1>
 <p><strong>Description:</strong> <%= @bug.description %></p>
-<p><strong>Status:</strong> <%= @bug.status %></p>
+<p><strong>Status:</strong> 
+  <%= if @bug.feature_request?
+        Bug::FEATURE_STATUSES.key(@bug.status).to_s.humanize
+      else
+        Bug::BUG_STATUSES.key(@bug.status).to_s.humanize
+      end
+  %>
+</p>
+
 <p><strong>Bug Type:</strong> <%= @bug.bug_type %></p>
 <p><strong>Assigned Developer:</strong> <%= @bug.developer&.name || "Unassigned" %></p>
 <p><strong>Deadline:</strong> <%= @bug.deadline %></p>
