@@ -4,11 +4,7 @@ class ProjectsController < ApplicationController
   before_action :authorize_manager, only: [:new, :create, :edit, :update, :destroy]
 
   def index
-    if current_user.manager?
-      @projects = Project.joins(:project_users).where(project_users: { user_id: current_user.id })
-    else
-      @projects = current_user.projects
-    end
+    @projects = current_user.projects
   end
   
   def show; end

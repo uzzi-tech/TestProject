@@ -1,9 +1,11 @@
+<div  class="text-danger">
 <% if flash[:alert].present? %>
     <%= flash[:alert] %>
 <% end %>
+</div>
 
 <% if @user && @user.errors.any? %>
-    <ul>
+    <ul  class="text-danger" >
       <% @user.errors.full_messages.each do |msg| %>
         <%= msg %>
       <% end %>

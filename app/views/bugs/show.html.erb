@@ -1,3 +1,5 @@
+<div class="container d-flex flex-column justify-content-center align-items-center mt-5">
+
 <h1><%= @bug.title %></h1>
 <p><strong>Description:</strong> <%= @bug.description %></p>
 <p><strong>Status:</strong> 
@@ -20,5 +22,7 @@
   <p>No screenshot uploaded.</p>
 <% end %>
 
-<%= link_to "Edit Bug", edit_project_bug_path(@project, @bug) %> |
-<%= link_to "Back to Bugs", project_bugs_path(@project) %>
+<%= link_to "Edit Bug", edit_project_bug_path(@project, @bug), class: "btn btn-success btn-sm mt-5" %>
+<%= link_to "Back to Bugs", project_bugs_path(@project), class: "btn btn-success btn-sm mt-2" %>
+
+</div>

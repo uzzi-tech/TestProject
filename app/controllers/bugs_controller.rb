@@ -1,15 +1,15 @@
 class BugsController < ApplicationController
     before_action :set_project
     before_action :set_bug, only: [:show, :edit, :update, :destroy]
-    before_action :authorize_bug_update, only: [:edit, :update]
+    before_action :authorize_bug_update, only: [:edit, :update, :destroy]
     before_action :authorize_manager_or_qa, only: [:new, :create, :destroy]
 
   
     def index
       if current_user.manager?
-        @bugs = Bug.joins(:project).where(projects: { id: current_user.project_users.pluck(:project_id) })
-      elsif current_user.qa?
         @bugs = Bug.where(project_id: current_user.project_ids) 
+      elsif current_user.qa?
+        @bugs = @project.bugs 
       elsif current_user.developer?
         @bugs = Bug.where(developer_id: current_user.id) # Developer sees only assigned bugs
       end

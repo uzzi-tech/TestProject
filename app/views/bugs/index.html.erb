@@ -1,13 +1,23 @@
-<h1>Bugs for <%= @project.name %></h1>
-<%= link_to "New Bug", new_project_bug_path(@project) %>
+<div class="container d-flex flex-column justify-content-center align-items-center mt-5">
+
+<h1 class= "text-info">Bugs for Projects :  <%= @project.name %></h1>
+<%= link_to "New Bug", new_project_bug_path(@project) ,  class: "btn btn-success mb-5"%>
 
 <ul>
   <% @bugs.each do |bug| %>
-    <li>
+    <li class="d-flex justify-content-between align-items-center mb-3">
+    <div class="d-flex gap-3">
       <strong><%= bug.title %></strong> - <%= bug.feature_request? ? Bug::FEATURE_STATUSES.key(bug.status) : Bug::BUG_STATUSES.key(bug.status) %> - <%= bug.bug_type %> <br>
-      <%= link_to "View", project_bug_path(@project, bug) %> |
-      <%= link_to "Edit", edit_project_bug_path(@project, bug) %> |
-      <%= button_to "Delete", delete_project_bug_path(@project, bug), method: :delete, data: { confirm: "Are you sure?" }, disabled: !current_user.manager? && !current_user.qa? %>
-    </li>
+      <div class="d-flex gap-3">
+      <%= link_to "View", project_bug_path(@project, bug), class: "btn btn-success btn-sm"%> 
+      <%= link_to "Edit", edit_project_bug_path(@project, bug), class: "btn btn-warning btn-sm"%>
+      <%= button_to "Delete", delete_project_bug_path(@project, bug), method: :delete, data: { confirm: "Are you sure?" }, disabled: !current_user.manager? && !current_user.qa?, class: "btn btn-danger btn-sm" %>
+    </div>
+      </li>
+
   <% end %>
 </ul>
+
+<%= link_to "Back to Projects", projects_path, class: "btn btn-success btn-sm"  %>
+
+</div>
