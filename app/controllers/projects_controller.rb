@@ -5,15 +5,13 @@ class ProjectsController < ApplicationController
 
   def index
     if current_user.manager?
-      @projects = Project.all
+      @projects = Project.joins(:project_users).where(project_users: { user_id: current_user.id })
     else
-      @projects = current_user.projects # Developers & QAs only see assigned projects
+      @projects = current_user.projects
     end
   end
   
-
-  def show
-  end
+  def show; end
 
   def new
     @project = Project.new
@@ -21,21 +19,22 @@ class ProjectsController < ApplicationController
 
   def create
     @project = Project.new(project_params)
-
+  
     if @project.save
-      assign_users_to_project
-      redirect_to projects_path, notice: "Project created successfully and users assigned."
+      assign_users_to_new_project
+      @project.project_users.create(user: current_user) 
+      redirect_to projects_path, notice: "Project created successfully and manager assigned."
     else
       render :new
     end
-  end
+  end  
 
   def edit
   end
 
   def update
     if @project.update(project_params)
-      assign_users_to_project
+      assign_users_to_existing_project
       redirect_to projects_path, notice: "Project updated successfully."
     else
       render :edit
@@ -61,21 +60,17 @@ class ProjectsController < ApplicationController
     params.require(:project).permit(:name, :description)
   end
 
-  def assign_users_to_project
-    # Remove existing project assignments to avoid duplicates
-    @project.project_users.destroy_all
-  
-    # Assign QA users
+  def assign_users_to_new_project
     qa_users = User.where(id: params[:project][:qa_ids])
-    qa_users.each do |qa|
-      ProjectUser.create(user: qa, project: @project)
-    end
-  
-    # Assign Developer users
+    qa_users.each { |qa| @project.project_users.create(user: qa) }
+
     developer_users = User.where(id: params[:project][:developer_ids])
-    developer_users.each do |dev|
-      ProjectUser.create(user: dev, project: @project)
-    end
+    developer_users.each { |dev| @project.project_users.create(user: dev) }
   end
-  
+
+  def assign_users_to_existing_project
+    @project.project_users.where.not(user_id: current_user.id).destroy_all  # Remove old assignments
+
+    assign_users_to_new_project  # Reassign users
+  end
 end

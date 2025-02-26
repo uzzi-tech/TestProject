@@ -2,12 +2,12 @@ class BugsController < ApplicationController
     before_action :set_project
     before_action :set_bug, only: [:show, :edit, :update, :destroy]
     before_action :authorize_bug_update, only: [:edit, :update]
-    before_action :authorize_manager_or_qa, only: [:new, :create, :edit, :update, :destroy]
+    before_action :authorize_manager_or_qa, only: [:new, :create, :destroy]
 
   
     def index
       if current_user.manager?
-        @bugs = Bug.all
+        @bugs = Bug.joins(:project).where(projects: { id: current_user.project_users.pluck(:project_id) })
       elsif current_user.qa?
         @bugs = Bug.where(project_id: current_user.project_ids) 
       elsif current_user.developer?
@@ -42,12 +42,17 @@ class BugsController < ApplicationController
     end
   
     def update
+      if params[:bug][:screenshot].present?
+        @bug.screenshot.remove!
+      end
+    
       if @bug.update(bug_params)
         redirect_to project_bug_path(@project, @bug), notice: "Bug updated successfully!"
       else
         render :edit
       end
     end
+    
   
     def destroy
       @bug.destroy
@@ -61,10 +66,8 @@ class BugsController < ApplicationController
       
 
     def authorize_bug_update
-      if current_user.developer? && @bug.developer_id != current_user.id
-        redirect_to bugs_path, alert: "You can only update your assigned bugs!"
-      elsif current_user.qa? && @bug.creator_id != current_user.id
-        redirect_to bugs_path, alert: "You can only update bugs you created!"
+      if current_user.qa? && @bug.creator_id != current_user.id
+        redirect_to project_bugs_path, alert: "You can only update bugs you created!"
       end
     end
   

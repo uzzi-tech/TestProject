@@ -1,7 +1,4 @@
 <h1>New Bug for <%= @project.name %></h1>
-<% unless current_user.manager? || current_user.qa? %>
-  <p>You do not have permission to create a bug.</p>
-<% end %>
 
 <%= form_with model: [@project, @bug], local: true do |f| %>
   <div>
@@ -35,8 +32,10 @@
   </div>
 
   <div>
-    <%= f.label :developer_id, "Assign to Developer" %>
-    <%= f.collection_select :developer_id, User.all, :id, :name, include_blank: "Unassigned" %>
+  <%= f.label :developer_id, "Assign to Developer" %>
+  <%= f.collection_select :developer_id, 
+        @project.users.where(user_type: 'developer'), 
+        :id, :name%>
   </div>
 
   <div>
@@ -72,4 +71,3 @@
     updateStatusOptions(); // Set initial state
   });
 </script>
-

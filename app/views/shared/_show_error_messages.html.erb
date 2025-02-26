@@ -1,22 +1,11 @@
-
 <% if flash[:alert].present? %>
-  <div class="alert alert-danger">
     <%= flash[:alert] %>
-  </div>
-<% end %>
-
-<% if flash[:notice].present? %>
-  <div class="alert alert-success">
-    <%= flash[:notice] %>
-  </div>
 <% end %>
 
 <% if @user && @user.errors.any? %>
-  <div class="alert alert-danger">
     <ul>
       <% @user.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
+        <%= msg %>
       <% end %>
     </ul>
-  </div>
 <% end %>
