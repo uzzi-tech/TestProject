@@ -30,10 +30,10 @@ class BugsController < ApplicationController
       puts "BUG STATUS BEFORE SAVE: #{@bug.status.inspect}"  # Debugging line
     
       if @bug.save
-        flash[:notice] = "Bug created successfully!"
+        flash[:alert] = "Bug created successfully!"
         redirect_to project_bugs_path(@project)
       else
-        puts @bug.errors.full_messages  # Print errors in console
+        flash[:alert] = @bug.errors.full_messages.join(", ") 
         render :new, status: :unprocessable_entity
       end
     end    
@@ -47,8 +47,9 @@ class BugsController < ApplicationController
       end
     
       if @bug.update(bug_params)
-        redirect_to project_bug_path(@project, @bug), notice: "Bug updated successfully!"
+        redirect_to project_bug_path(@project, @bug), alert: "Bug updated successfully!"
       else
+        flash[:alert] = @bug.errors.full_messages.join(", ")
         render :edit
       end
     end
@@ -56,7 +57,7 @@ class BugsController < ApplicationController
   
     def destroy
       @bug.destroy
-      redirect_to project_bugs_path(@project), notice: "Bug deleted successfully!"
+      redirect_to project_bugs_path(@project), alert: "Bug deleted successfully!"
     end
   
     private

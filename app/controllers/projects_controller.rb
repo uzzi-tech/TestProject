@@ -15,13 +15,13 @@ class ProjectsController < ApplicationController
 
   def create
     @project = Project.new(project_params)
-  
     if @project.save
       assign_users_to_new_project
       @project.project_users.create(user: current_user) 
-      redirect_to projects_path, notice: "Project created successfully and manager assigned."
+      redirect_to projects_path, alert: "Project created successfully"
     else
       render :new
+      flash[:alert] = @project.errors.full_messages.join(", ")
     end
   end  
 
@@ -31,15 +31,16 @@ class ProjectsController < ApplicationController
   def update
     if @project.update(project_params)
       assign_users_to_existing_project
-      redirect_to projects_path, notice: "Project updated successfully."
+      redirect_to projects_path, alert: "Project updated successfully."
     else
+      flash[:alert] = @project.errors.full_messages.join(", ")
       render :edit
     end
   end
 
   def destroy
     @project.destroy
-    redirect_to projects_path, notice: "Project deleted."
+    redirect_to projects_path, alert: "Project deleted."
   end
 
   private

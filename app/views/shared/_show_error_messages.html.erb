@@ -4,10 +4,25 @@
 <% end %>
 </div>
 
-<% if @user && @user.errors.any? %>
-    <ul  class="text-danger" >
-      <% @user.errors.full_messages.each do |msg| %>
-        <%= msg %>
-      <% end %>
-    </ul>
+<% if @user&.errors&.any? %>
+  <ul class="text-danger">
+    <% @user.errors.full_messages.each do |msg| %>
+      <li><%= msg %></li>
+    <% end %>
+  </ul>
+<% elsif @bug&.errors&.any? %>
+  <ul class="text-danger">
+    <% @bug.errors.full_messages.each do |msg| %>
+      <li><%= msg %></li>
+    <% end %>
+  </ul>
+<% elsif @project&.errors&.any? %>
+  <ul class="text-danger">
+    <% @project.errors.full_messages.each do |msg| %>
+      <li><%= msg %></li>
+    <% end %>
+  </ul>
 <% end %>
+
+
+# working on reload but without reload not working 

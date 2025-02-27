@@ -20,7 +20,7 @@
 
   <div class="mb-2">
     <%= f.label :bug_type %>
-    <%= f.select :bug_type, Bug.bug_types.keys, {}, { id: "bug_type_select" ,class: "form-control" } %>
+    <%= f.select :bug_type, Bug.bug_types.keys.map { |type| [type.humanize, type] }, {}, { id: "bug_type_select" ,class: "form-control" } %>
   </div>
 
   <div class="mb-2">

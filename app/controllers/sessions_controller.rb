@@ -13,7 +13,7 @@ class SessionsController < ApplicationController
     
     if user && user.authenticate(params[:password]) # Check password
       session[:user_id] = user.id  # Store user in session
-      flash[:notice] = "Logged in successfully!"
+      flash[:alert] = "Logged in successfully!"
       redirect_to projects_path
     else
       @user ||= User.new(email: params[:email])  # Preserve entered email in form
@@ -24,7 +24,7 @@ class SessionsController < ApplicationController
 
   def destroy
     session[:user_id] = nil # Logout user
-    flash[:notice] = "Logged out successfully!"
+    flash[:alert] = "Logged out successfully!"
     redirect_to login_path
   end
 end
