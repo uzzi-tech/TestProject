@@ -12,12 +12,12 @@
   </p>
   <p> 
   <%= form.label :qa_users, "Assign QA(s)" %><br>
-  <%= form.collection_select :qa_ids, User.where(user_type: :qa), :id, :name, { selected: @project.users.where(user_type: :qa).pluck(:id) }, multiple: true, class: "form-control" %>
+  <%= form.collection_select :user_ids, User.where(user_type: :qa), :id, :name, { selected: @project.users.where(user_type: :qa).pluck(:id) }, multiple: true, class: "form-control" %>
 </p> 
 
 <p>
   <%= form.label :developer_users, "Assign Developer(s)" %><br>
-  <%= form.collection_select :developer_ids, User.where(user_type: :developer), :id, :name, { selected: @project.users.where(user_type: :developer).pluck(:id) }, multiple: true , class: "form-control"%>
+  <%= form.collection_select :user_ids, User.where(user_type: :developer), :id, :name, { selected: @project.users.where(user_type: :developer).pluck(:id) }, multiple: true , class: "form-control"%>
 </p>
 
   <p>

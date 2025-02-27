@@ -13,17 +13,20 @@
   </p>
 
   <p>
-    <%= form.label :qa_users, "Assign QA(s)" %><br>
-    <%= form.collection_select :qa_ids, User.where(user_type: :qa), :id, :name, {}, multiple: true, class: "form-control" %>
+  <%= form.label :users, "Assign QA(s)" %><br>
+  <%= form.collection_select :user_ids, User.where(user_type: :qa), :id, :name, {}, multiple: true, class: "form-control" %>
   </p>
 
   <p>
-    <%= form.label :developer_users, "Assign Developer(s)" %><br>
-    <%= form.collection_select :developer_ids, User.where(user_type: :developer), :id, :name, {}, multiple: true,  class: "form-control" %>
+  <%= form.label :users, "Assign Developer(s)" %><br>
+  <%= form.collection_select :user_ids, User.where(user_type: :developer), :id, :name, {}, multiple: true, class: "form-control" %>
   </p>
+
 
   <p>
     <%= form.submit "Create Project", class: "btn btn-primary btn-sm" %>
   </p>
 <% end %>
+
+<%= link_to "Back to Projects", projects_path, class: "btn btn-success btn-sm" %>
 </div>

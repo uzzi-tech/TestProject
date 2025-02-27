@@ -6,7 +6,7 @@ class ProjectsController < ApplicationController
   def index
     @projects = current_user.projects
   end
-  
+
   def show; end
 
   def new
@@ -15,23 +15,22 @@ class ProjectsController < ApplicationController
 
   def create
     @project = Project.new(project_params)
-    if @project.save
-      assign_users_to_new_project
-      @project.project_users.create(user: current_user) 
-      redirect_to projects_path, alert: "Project created successfully"
-    else
-      render :new
-      flash[:alert] = @project.errors.full_messages.join(", ")
-    end
-  end  
 
-  def edit
+    if @project.save
+      @project.user_ids = (params[:project][:user_ids] || []) + [current_user.id] # Ensure manager is added
+      redirect_to projects_path, notice: "Project created successfully"
+    else
+      flash[:alert] = @project.errors.full_messages.join(", ")
+      render :new
+    end
   end
+
+  def edit; end
 
   def update
     if @project.update(project_params)
-      assign_users_to_existing_project
-      redirect_to projects_path, alert: "Project updated successfully."
+      @project.user_ids = (params[:project][:user_ids] || []) + [current_user.id] 
+      redirect_to projects_path, notice: "Project updated successfully"
     else
       flash[:alert] = @project.errors.full_messages.join(", ")
       render :edit
@@ -40,7 +39,7 @@ class ProjectsController < ApplicationController
 
   def destroy
     @project.destroy
-    redirect_to projects_path, alert: "Project deleted."
+    redirect_to projects_path, notice: "Project deleted successfully."
   end
 
   private
@@ -48,26 +47,12 @@ class ProjectsController < ApplicationController
   def authorize_manager
     redirect_to projects_path, alert: "Access denied!" unless current_user.manager?
   end
-  
+
   def set_project
     @project = Project.find(params[:id])
   end
 
   def project_params
-    params.require(:project).permit(:name, :description)
-  end
-
-  def assign_users_to_new_project
-    qa_users = User.where(id: params[:project][:qa_ids])
-    qa_users.each { |qa| @project.project_users.create(user: qa) }
-
-    developer_users = User.where(id: params[:project][:developer_ids])
-    developer_users.each { |dev| @project.project_users.create(user: dev) }
-  end
-
-  def assign_users_to_existing_project
-    @project.project_users.where.not(user_id: current_user.id).destroy_all  # Remove old assignments
-
-    assign_users_to_new_project  # Reassign users
+    params.require(:project).permit(:name, :description, user_ids: [])
   end
 end
